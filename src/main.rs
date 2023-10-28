@@ -4,6 +4,7 @@ use macroquad::prelude::*;
 async fn main() 
 {
     let slime = load_texture("./assets/slime.png").await.unwrap();
+    let player_position = 
     loop 
     {
         clear_background(WHITE);
