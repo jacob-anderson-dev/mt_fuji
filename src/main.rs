@@ -7,7 +7,12 @@ async fn main()
     loop 
     {
         clear_background(WHITE);
-        draw_texture(&slime, screen_width() / 2.0, screen_height() / 2.0, WHITE);
+        draw_texture(
+            &slime,
+            (screen_width() - slime.width()) / 2.0,
+            (screen_height() - slime.height()) / 2.0,
+            WHITE
+        );
         next_frame().await;
     }
 }
