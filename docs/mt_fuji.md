@@ -7,13 +7,19 @@
 - Controlled with arrow keys
 - Schmovement and one really short range melee attack.
 - Speedrun timer.
+- Music
+- Sound Effects.
 
 #### Nouns:
-- Samurai/Player
-- Enemy -> anything slime, ninjas
+- Player -> Samurai
+- Death ghost
+- Enemy -> anything slime, ninjas (evil)
 - Exit
 - Start
 - Platform
+- Timer
+- Health -> might be like 2 hits
+- 
 
 #### Lore:
 - FUNNY -> was going to have to commit sepuku, only has sepuku knife, but wants most honorable death and is running into volcano.
