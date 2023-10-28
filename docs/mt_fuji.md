@@ -11,35 +11,37 @@
 - Sound Effects.
 
 #### Nouns:
-- Player
-  - Samurai
-  - Death ghost
-  - 2 hits of health
-  - On death respawns at start
-- Enemy
-  - Ninjas
-- Exit
-  - On collision with player
-    - End level screen shows
-      - Menu background image
-      - Timer value
-      - Score (Num enemies killed, sepuku)
-      - Proceed button
-- Start
-  - Spawn in player here.
-  - don't start game until player presses a key
-- Platform
-    - trees
-    - Pagoda roof
-    - birds
-- GUI
-  - Timer GUI
-      - counts up
-  - Health Gui
-  - Main menu
-  - Pause menu
-  - End level gui
-  - End game gui / You win, return to hub
+- Daniel
+  - Player
+    - Samurai
+    - Death ghost
+    - 2 hits of health
+    - On death respawns at start
+  - Enemy
+    - Ninjas (constant hurt box)
+  - Exit
+    - On collision with player
+      - End level screen shows
+        - Menu background image
+        - Timer value
+        - Score (Num enemies killed, sepuku)
+        - Proceed button
+  - Start
+    - Spawn in player here.
+    - don't start game until player presses a key
+- Jacob
+  - Platform
+      - trees
+      - Pagoda roof
+      - birds
+  - GUI
+    - Timer GUI
+        - counts up
+    - Health Gui
+    - Main menu
+    - Pause menu
+    - End level gui
+    - End game gui / You win, return to hub
 
 #### Verb:
 - Fall/Gravity
@@ -71,4 +73,5 @@
 - Respawn points/ checkpoints later.
 - Moving platforms
 - Semi=permeable platforms.
-- 
+- Better pathfinding
+- Add enemy attack
