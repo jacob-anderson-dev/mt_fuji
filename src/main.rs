@@ -35,6 +35,9 @@ const PLAYER_IDLE_FRAMES: [Rect; 10] = [
     Rect { x: (9.0 * (31.0 + 17.0) + 14.0),  y: 10.0, w: 20.0, h: 32.0 },
 ];
 
+const GRAVITY: f32 = 1.0;
+const JUMP_HEIGHT: f32 = 3.0;
+
 /*****************************************************************************************/
 
 #[macroquad::main(settings)]
@@ -53,39 +56,25 @@ async fn main()
             29.0 / 2.0,
         ),
         ghost_texture: player_ghost_texture,
-        animation_index: 0,
     };
 
-    // let mut i: usize = 0;
+    let mut player_animation_index: usize = 0;
+    let mut frame_count = 0.0;
+    let multiplier = 8.0;
 
     loop 
     {
         clear_background(WHITE);
-        // if is_key_pressed(KeyCode::Key0) { i = 0; }
-        // if is_key_pressed(KeyCode::Key1) { i = 1; }
-        // if is_key_pressed(KeyCode::Key2) { i = 2; }
-        // if is_key_pressed(KeyCode::Key3) { i = 3; }
-        // if is_key_pressed(KeyCode::Key4) { i = 4; }
-        // if is_key_pressed(KeyCode::Key5) { i = 5; }
-        // if is_key_pressed(KeyCode::Key6) { i = 6; }
-        // if is_key_pressed(KeyCode::Key7) { i = 7; }
-        // if is_key_pressed(KeyCode::Key8) { i = 8; }
-        // if is_key_pressed(KeyCode::Key9) { i = 9; }
-        // draw_texture_ex(
-        //     &player_texture,
-        //     0.0,
-        //     0.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: Some(Vec2::new(170.0, 290.0)),
-        //         source: Some(PLAYER_IDLE_FRAMES[i]),
-        //         rotation: 0.0,
-        //         flip_x: false,
-        //         flip_y: false,
-        //         pivot: None,
-        //     }
-        // );
-        player.draw();
+
+        if frame_count % multiplier == 0.0
+        {
+            player_animation_index += 1;
+        }
+
+        player.update();
+        player.draw(&mut player_animation_index);
+
+        frame_count += 1.0;
         next_frame().await;
     }
 }
@@ -93,12 +82,26 @@ async fn main()
 /*****************************************************************************************/
 
 // TRAITS
-pub trait Drawable
+pub trait DrawableSingular
 {
-    fn draw(&mut self);
+    fn draw(&self);
+}
+
+pub trait Animated {
+    fn draw(&mut self, animation_index: &mut usize);
 }
 
 /*****************************************************************************************/
+
+enum Direction {
+    Left,
+    Right,
+}
+
+enum PlayerState {
+    Idle,
+    Walk(Direction),
+}
 
 /// Stores player's location data, health, alive status
 pub struct Player
@@ -108,7 +111,6 @@ pub struct Player
     hitbox: Rect,
     texture: Texture2D,
     ghost_texture: Texture2D,
-    animation_index: usize,
 }
 impl Player
 {
@@ -156,14 +158,47 @@ impl Player
         self.ghost_texture = ghost_texture;
     }  
 
+    
+    // actions
     pub fn attack(&self) {
         // make hurt box appear in front of player
     }  
-}
-impl Drawable for Player
-{
-    fn draw(&mut self)
+    pub fn handle_input(&mut self)
     {
+        if is_key_down(KeyCode::Left)
+        {
+            self.position -= Vec2::X;
+        }
+        if is_key_down(KeyCode::Right)
+        {
+            self.position += Vec2::X;
+        }
+        if is_key_down(KeyCode::Z)
+        {
+            self.position.y -= JUMP_HEIGHT;
+        }
+    } 
+    pub fn apply_gravity(&mut self)
+    {
+        if !(self.position.y > screen_height() + self.hitbox.y + self.hitbox.h)
+        {
+            self.position.y += GRAVITY;
+        }
+    }
+    pub fn update(&mut self)
+    {
+        self.handle_input();
+        self.apply_gravity();
+    }
+}
+impl Animated for Player
+{
+    fn draw(&mut self, animation_index: &mut usize)
+    {
+        if *animation_index >= 9 
+        {
+            *animation_index = 0;
+        }
         if self.health > 0
         {
             draw_texture_ex(
@@ -173,7 +208,7 @@ impl Drawable for Player
                 WHITE,
                 DrawTextureParams {
                     dest_size: Some(Vec2::new(170.0, 290.0)),
-                    source: Some(PLAYER_IDLE_FRAMES[self.animation_index]),
+                    source: Some(PLAYER_IDLE_FRAMES[*animation_index]),
                     rotation: 0.0,
                     flip_x: false,
                     flip_y: false,
@@ -189,22 +224,13 @@ impl Drawable for Player
                 WHITE,
                 DrawTextureParams {
                     dest_size: Some(Vec2::new(170.0, 290.0)),
-                    source: Some(PLAYER_IDLE_FRAMES[self.animation_index]),
+                    source: Some(PLAYER_IDLE_FRAMES[*animation_index]),
                     rotation: 0.0,
                     flip_x: false,
                     flip_y: false,
                     pivot: None,
                 },
             );
-        }
-
-        if self.animation_index >= 9
-        {
-            self.animation_index = 0;
-        }
-        else
-        {
-            self.animation_index += 1;
         }
     }
 }
@@ -261,8 +287,8 @@ impl Enemy {
         self.texture = texture;
     }
 }
-impl Drawable for Enemy {
-    fn draw(&mut self) {
+impl Animated for Enemy {
+    fn draw(&mut self, animation_index: &mut usize) {
         draw_texture_ex(
             &self.texture,
             self.position.x,
@@ -284,9 +310,9 @@ struct Platforms
     hitbox: Rect
 }
 
-impl Drawable for Platforms
+impl Animated for Platforms
 {
-    fn draw(&mut self)
+    fn draw(&mut self, animation_index: &mut usize)
     {
         // Draw platform texture
     }
@@ -313,9 +339,9 @@ impl HealthHUD
     }
 }
 
-impl Drawable for HealthHUD
+impl DrawableSingular for HealthHUD
 {
-    fn draw(&mut self)
+    fn draw(& self)
     {
         // Draw background texture
         // Draw text label
