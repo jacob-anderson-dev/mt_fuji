@@ -4,7 +4,7 @@ use macroquad::prelude::*;
 async fn main() 
 {
     let slime = load_texture("./assets/slime.png").await.unwrap();
-    let player_position = 
+    let mut player_position = Vec2::new(screen_width(), screen_height());
     loop 
     {
         clear_background(WHITE);
