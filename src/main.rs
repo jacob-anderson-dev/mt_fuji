@@ -56,36 +56,36 @@ async fn main()
         animation_index: 0,
     };
 
-    let mut i: usize = 0;
+    // let mut i: usize = 0;
 
     loop 
     {
         clear_background(WHITE);
-        if is_key_pressed(KeyCode::Key0) { i = 0; }
-        if is_key_pressed(KeyCode::Key1) { i = 1; }
-        if is_key_pressed(KeyCode::Key2) { i = 2; }
-        if is_key_pressed(KeyCode::Key3) { i = 3; }
-        if is_key_pressed(KeyCode::Key4) { i = 4; }
-        if is_key_pressed(KeyCode::Key5) { i = 5; }
-        if is_key_pressed(KeyCode::Key6) { i = 6; }
-        if is_key_pressed(KeyCode::Key7) { i = 7; }
-        if is_key_pressed(KeyCode::Key8) { i = 8; }
-        if is_key_pressed(KeyCode::Key9) { i = 9; }
-        draw_texture_ex(
-            &player_texture,
-            0.0,
-            0.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: Some(Vec2::new(170.0, 290.0)),
-                source: Some(PLAYER_IDLE_FRAMES[i]),
-                rotation: 0.0,
-                flip_x: false,
-                flip_y: false,
-                pivot: None,
-            }
-        );
-        // player.draw();
+        // if is_key_pressed(KeyCode::Key0) { i = 0; }
+        // if is_key_pressed(KeyCode::Key1) { i = 1; }
+        // if is_key_pressed(KeyCode::Key2) { i = 2; }
+        // if is_key_pressed(KeyCode::Key3) { i = 3; }
+        // if is_key_pressed(KeyCode::Key4) { i = 4; }
+        // if is_key_pressed(KeyCode::Key5) { i = 5; }
+        // if is_key_pressed(KeyCode::Key6) { i = 6; }
+        // if is_key_pressed(KeyCode::Key7) { i = 7; }
+        // if is_key_pressed(KeyCode::Key8) { i = 8; }
+        // if is_key_pressed(KeyCode::Key9) { i = 9; }
+        // draw_texture_ex(
+        //     &player_texture,
+        //     0.0,
+        //     0.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: Some(Vec2::new(170.0, 290.0)),
+        //         source: Some(PLAYER_IDLE_FRAMES[i]),
+        //         rotation: 0.0,
+        //         flip_x: false,
+        //         flip_y: false,
+        //         pivot: None,
+        //     }
+        // );
+        player.draw();
         next_frame().await;
     }
 }
