@@ -128,18 +128,6 @@ impl PlayerSprites {
             ),
         }
     }
-
-    pub fn update(&mut self) {
-        self.idle.update();
-        self.heavy_attack.update();
-        self.light_attack.update();
-        self.jump.update();
-        self.roll.update();
-        self.run.update();
-        self.run_sword.update();
-        self.take_damage.update();
-        self.death.update();
-    }
 }
 pub struct Player {
     textures: PlayerTextures,
@@ -159,6 +147,20 @@ impl Player {
             y: 0.0,
             facing_left: false,
         }
+    }
+
+    fn update_active_sprite(&mut self) {
+        match self.state {
+            PlayerState::Idle => self.sprites.idle.update(),
+            PlayerState::HeavyAttack => self.sprites.heavy_attack.update(),
+            PlayerState::LightAttack => self.sprites.light_attack.update(),
+            PlayerState::Jump => self.sprites.jump.update(),
+            PlayerState::Roll => self.sprites.roll.update(),
+            PlayerState::Run => self.sprites.run.update(),
+            PlayerState::RunSword => self.sprites.run_sword.update(),
+            PlayerState::TakeDamage => self.sprites.take_damage.update(),
+            PlayerState::Death => self.sprites.death.update(),
+        };
     }
 
     fn get_animation_data(&self) -> (&Texture2D, &AnimatedSprite) {
@@ -191,7 +193,7 @@ impl Player {
             }
         );
 
-        self.sprites.update();
+        self.update_active_sprite();
     }
 
     pub fn test_animations(&mut self) {
